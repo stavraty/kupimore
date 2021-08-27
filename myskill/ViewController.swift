@@ -74,7 +74,5 @@ class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
 
         self.present(alertController, animated: true, completion: nil)
     }
-    
-    //test2
-}
 
+}

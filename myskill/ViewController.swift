@@ -42,6 +42,34 @@ class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
 
         // Do any additional setup after loading the view, typically from a nib.
         
+        let reachability = try! Reachability()
+        
+        func viewWillAppear(_ <#T##animated: Bool##Bool#>) {
+            super.viewWillAppear(animated)
+            DispatchQueue.main.async {
+                reachability.whenReachable = { reachability in
+                    if reachability.connection == .wifi {
+                        print("Reachable via WiFi")
+                    } else {
+                        print("Reachable via Cellular")
+                    }
+                }
+                reachability.whenUnreachable = { _ in
+                    print("Not reachable")
+                }
+
+                do {
+                    try reachability.startNotifier()
+                } catch {
+                    print("Unable to start notifier")
+                }
+            }
+        }
+        
+        deinit {
+            reachability.stopNotifier()
+        }
+        // Do any additional setup after loading the view, typically from a nib.
         
     }
 

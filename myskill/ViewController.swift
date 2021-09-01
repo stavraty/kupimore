@@ -16,10 +16,14 @@
 
 import UIKit
 import WebKit
+import SwiftUI
 
 class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
 
     //MARK:- Variable Declarations
+    
+    @ObservedObject var monitor = NetworkMonitor()
+    @State private var showAlertSheet = false
 
     @IBOutlet var mWKWebView: WKWebView!
     
@@ -70,5 +74,24 @@ class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
 
         self.present(alertController, animated: true, completion: nil)
     }
+// NetworkMonitor
+    var body: some View {
+        VStack {
+            Image(systemName: monitor.isConnected ? "wifi" : "wifi.slash")
+                .font(.system(size: 56))
+            Text(monitor.isConnected ? "Connected!" : "Not connected")
+                .padding()
+            
+            Button("Perfom Network Request") {
+                self.showAlertSheet = true
+            }
+        }.alert(isPresented: $showAlertSheet, content: {
+            if monitor.isConnected {
+                return Alert(title: Text("Success!"), message: Text("The network request can be performed."), dismissButton: .default(Text("OK")))
+            }
+            return Alert(title: Text("No Internet Connection"), message: Text("Please enable WiFi or Cellular data"), dismissButton: .default(Text("Cansel")))
+        })
+        }
+    }
+// NetworkMonitor
 
-}
